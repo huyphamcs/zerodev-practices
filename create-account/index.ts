@@ -3,7 +3,7 @@ import { createKernelAccount, createKernelAccountClient, createZeroDevPaymasterC
 import { KERNEL_V3_1, getEntryPoint } from "@zerodev/sdk/constants";
 import "dotenv/config"
 import { createPublicClient, http, zeroAddress } from "viem";
-import { createPaymasterClient } from "viem/_types/account-abstraction";
+
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { sepolia } from "viem/chains";
 if (!process.env.ZERODEV_RPC) {
@@ -38,11 +38,11 @@ const main = async () => {
     })
     console.log("Account address: ", account.address);
 
-    const paymasterClient = await createZeroDevPaymasterClient({
+    const paymasterClient = createZeroDevPaymasterClient({
         chain,
         transport: http(process.env.ZERODEV_RPC)
     })
-    const kernelClient = await createKernelAccountClient({
+    const kernelClient = createKernelAccountClient({
         account,
         chain,
         bundlerTransport: http(process.env.ZERODEV_RPC),
