@@ -9,6 +9,7 @@ import { sepolia } from "viem/chains";
 if (!process.env.ZERODEV_RPC) {
     throw new Error("ZeroDev RPC is not added");
 }
+
 const chain = sepolia;
 const privateKey = generatePrivateKey();
 const signer = privateKeyToAccount(privateKey);
