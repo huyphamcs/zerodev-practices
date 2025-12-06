@@ -6,7 +6,7 @@ import { EntryPointVersion } from "viem/account-abstraction";
 import { GetKernelVersion } from "@zerodev/sdk/types/kernel";
 import { signerToEcdsaValidator } from "@zerodev/ecdsa-validator";
 import { createPublicClient, http } from "viem";
-import { createKernelAccount, createKernelAccountClient, createZeroDevPaymasterClient } from "@zerodev/sdk";
+import { KernelAccountClient, createKernelAccount, createKernelAccountClient, createZeroDevPaymasterClient } from "@zerodev/sdk";
 
 
 const ZERODEV_RPC=process.env.ZERODEV_RPC
@@ -14,7 +14,7 @@ const chain = sepolia
 const kernelVersion = KERNEL_V3_1
 const privateKey = generatePrivateKey();
 const signer = privateKeyToAccount(privateKey);
-const publicClient = createPublicClient({
+export const publicClient = createPublicClient({
     chain: chain,
     transport: http(ZERODEV_RPC)
 })
@@ -54,5 +54,22 @@ export const getKernelClient = async <entryPointVersion extends EntryPointVersio
             getPaymasterData: (userOperation) => {return paymasterClient.sponsorUserOperation({userOperation})}
         }
     })
-    return kernelClient
+    return {
+        entryPoint,
+        ecdsaValidator,
+        account,
+        paymasterClient,
+        kernelClient
+    }
+}
+
+
+export const getReceiptFromUserOpHash = async (
+    kernelClient: KernelAccountClient,
+    userOpHash: `0x${string}`
+) => {
+    const receipt = await kernelClient.waitForUserOperationReceipt({
+        hash: userOpHash
+    })
+    return receipt
 }

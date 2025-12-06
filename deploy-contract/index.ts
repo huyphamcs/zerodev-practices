@@ -5,7 +5,7 @@ import { GreeterAbi, GreeterBytecode } from "./Greeter";
 
 
 const main = async () => {
-    const kernelClient = await getKernelClient("0.7", KERNEL_V3_1);
+    const kernelClient = (await getKernelClient("0.7", KERNEL_V3_1)).kernelClient;
 
     const txHash = await kernelClient.sendTransaction({
         callData: await kernelClient.account.encodeDeployCallData({
